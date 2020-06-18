@@ -18,15 +18,19 @@ function App() {
 
 
   async function handleLikeRepository(id) {
+    const response = await api.post(`/repositories/${id}/like`);
 
-    const filtered = repositories.filter((repo) => { return repo.id === id } )
+    const list = repositories.map(repository => {
+      if (repository.id === id) {
 
-    await api.post(`repositories/${id}/like`)
-    .then((response)=>{
-      if(response.status === 204)
-      setRepositories([...repositories,filtered])
-    })
+        return response.data;
 
+      } else {
+        return repository;
+      }
+    });
+
+    setRepositories(list);
   }
 
   useEffect(()=>{
@@ -36,7 +40,7 @@ function App() {
 
     })
 
-  },[repositories])
+  },[])
 
   return (
     <>
